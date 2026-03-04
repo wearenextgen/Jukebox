@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Jukebox Prototype</title>
+<style>
+:root{--img-w:1570;--img-h:2048;}
+body{
+margin:0;background:#111;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+color:#fff;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;
+}
+.stage{width:min(520px,95vw);}
+.jukebox-wrap{
+position:relative;
+width:100%;
+aspect-ratio:1570/2048;
+user-select:none;
+background:url("jukebox.png") center center/contain no-repeat;
+}
+.overlay{position:absolute;inset:0;}
+.debug .hit,.debug .screen{outline:2px dashed rgba(0,255,255,.85);background:rgba(0,255,255,.10);}
+.screen{
+position:absolute;pointer-events:none;display:flex;align-items:center;justify-content:center;text-align:center;
+padding:0.6%;box-sizing:border-box;font-family:monospace;font-weight:700;letter-spacing:.02em;
+text-shadow:0 0 10px rgba(120,255,255,.35);color:rgba(200,255,255,.9);
+}
+.screen small{display:block;opacity:.9;font-weight:600;}
+.topText{font-size:clamp(10px,2vw,18px);line-height:1.1;}
+.midText{font-size:clamp(9px,1.7vw,15px);line-height:1.15;}
+.hit{position:absolute;border:0;padding:0;margin:0;background:transparent;cursor:pointer;border-radius:10%;}
+.hit:active{transform:translateY(1px);}
+.controls{margin-top:14px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
+.controls label{display:flex;align-items:center;gap:8px;opacity:.9;font-size:14px;}
+.now{opacity:.9;font-size:14px;line-height:1.3;}
+</style>
+</head>
+
+<body>
+
+<div class="stage">
+
+<div id="wrap" class="jukebox-wrap">
+
+<div class="overlay">
+
+<div id="topScreen" class="screen topText"
+style="left:34.8%;top:27.4%;width:30.6%;height:8.8%;">
+<div><small>JUKEBOX</small>READY</div>
+</div>
+
+<div id="midScreen" class="screen midText"
+style="left:40.0%;top:39.0%;width:20.8%;height:6.9%;">
+<div id="midText"><small>STATUS</small>Select a genre</div>
+</div>
+
+<button class="hit genre" data-genre="Pop"
+style="left:42.3%;top:49.8%;width:5.7%;height:2.9%;"></button>
+
+<button class="hit genre" data-genre="HipHop"
+style="left:52.8%;top:49.8%;width:5.7%;height:2.9%;"></button>
+
+<button class="hit genre" data-genre="Rock"
+style="left:42.2%;top:55.0%;width:5.7%;height:2.8%;"></button>
+
+<button class="hit genre" data-genre="EDM"
+style="left:52.8%;top:55.0%;width:5.7%;height:2.8%;"></button>
+
+<button class="hit genre" data-genre="RnB"
+style="left:42.3%;top:60.3%;width:5.7%;height:2.8%;"></button>
+
+<button class="hit genre" data-genre="Jazz"
+style="left:52.8%;top:60.3%;width:5.7%;height:2.8%;"></button>
+
+<button class="hit genre" data-genre="Disco"
+style="left:42.3%;top:65.6%;width:5.7%;height:2.8%;"></button>
+
+<button class="hit genre" data-genre="Random"
+style="left:52.8%;top:65.6%;width:5.7%;height:2.8%;"></button>
+
+</div>
+</div>
+
+<div class="controls">
+<label>
+<input id="debugToggle" type="checkbox"/> Debug overlay
+</label>
+<div class="now" id="nowLine"><b>Now:</b> nothing playing</div>
+</div>
+
+<audio id="player"></audio>
+
+</div>
+
+<script>
+
+const library={
+Pop:[{title:"Pop Track",src:"audio/pop1.mp3"}],
+HipHop:[{title:"HipHop Track",src:"audio/hiphop1.mp3"}],
+Rock:[{title:"Rock Track",src:"audio/rock1.mp3"}],
+EDM:[{title:"EDM Track",src:"audio/edm1.mp3"}],
+RnB:[{title:"R&B Track",src:"audio/rnb1.mp3"}],
+Jazz:[{title:"Jazz Track",src:"audio/jazz1.mp3"}],
+Disco:[{title:"Disco Track",src:"audio/disco1.mp3"}]
+};
+
+const wrap=document.getElementById("wrap");
+const topScreen=document.getElementById("topScreen");
+const midText=document.getElementById("midText");
+const nowLine=document.getElementById("nowLine");
+const player=document.getElementById("player");
+
+document.getElementById("debugToggle").addEventListener("change",e=>{
+wrap.classList.toggle("debug",e.target.checked);
+});
+
+function playTrack(track){
+player.src=track.src;
+player.play();
+topScreen.innerHTML=`<div><small>NOW PLAYING</small>${track.title}</div>`;
+midText.innerHTML=`<small>STATUS</small>PLAYING`;
+nowLine.innerHTML=`<b>Now:</b> ${track.title}`;
+}
+
+function playGenre(genre){
+if(genre==="Random"){
+const keys=Object.keys(library);
+genre=keys[Math.floor(Math.random()*keys.length)];
+}
+const tracks=library[genre];
+if(!tracks)return;
+const track=tracks[Math.floor(Math.random()*tracks.length)];
+playTrack(track);
+}
+
+document.querySelectorAll(".genre").forEach(btn=>{
+btn.addEventListener("click",()=>playGenre(btn.dataset.genre));
+});
+
+</script>
+
+</body>
+</html>
