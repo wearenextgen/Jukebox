@@ -4,11 +4,22 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Jukebox Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--img-w:1570;--img-h:2048;}
 body{
-margin:0;background:#111;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-color:#fff;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;
+margin:0;
+background:#111;
+font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+color:#fff;
+display:flex;
+min-height:100vh;
+align-items:center;
+justify-content:center;
+padding:24px;
+box-sizing:border-box;
 }
 .stage{width:min(520px,95vw);}
 .jukebox-wrap{
@@ -19,16 +30,43 @@ user-select:none;
 background:url("jukebox.png") center center/contain no-repeat;
 }
 .overlay{position:absolute;inset:0;}
-.debug .hit,.debug .screen{outline:2px dashed rgba(0,255,255,.85);background:rgba(0,255,255,.10);}
 .screen{
 position:absolute;pointer-events:none;display:flex;align-items:center;justify-content:center;text-align:center;
-padding:0.6%;box-sizing:border-box;font-family:monospace;font-weight:700;letter-spacing:.02em;
+padding:0.6%;box-sizing:border-box;font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
 text-shadow:0 0 10px rgba(120,255,255,.35);color:rgba(200,255,255,.9);
 }
 .screen small{display:block;opacity:.9;font-weight:600;}
 .topText{font-size:clamp(10px,2vw,18px);line-height:1.1;}
 .midText{font-size:clamp(9px,1.7vw,15px);line-height:1.15;}
-.hit{position:absolute;border:0;padding:0;margin:0;background:transparent;cursor:pointer;border-radius:10%;}
+.hit{
+position:absolute;
+border:0;
+padding:0;
+margin:0;
+background:rgba(0,0,0,.35);
+cursor:pointer;
+border-radius:10%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+font-weight:600;
+font-size:clamp(8px,1.4vw,12px);
+letter-spacing:.05em;
+text-transform:uppercase;
+color:rgba(255,255,255,.92);
+text-shadow:0 0 6px rgba(0,0,0,.75);
+border:1px solid rgba(255,255,255,.3);
+box-shadow:0 0 8px rgba(255,255,255,.35);
+backdrop-filter:blur(3px);
+}
+.transport{
+border-radius:50%;
+font-size:10px;
+background:rgba(255,255,255,.18);
+border:1px solid rgba(255,255,255,.4);
+box-shadow:0 0 10px rgba(255,255,255,.4);
+}
 .hit:active{transform:translateY(1px);}
 .controls{margin-top:14px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
 .controls label{display:flex;align-items:center;gap:8px;opacity:.9;font-size:14px;}
@@ -54,37 +92,43 @@ style="left:40.0%;top:39.0%;width:20.8%;height:6.9%;">
 <div id="midText"><small>STATUS</small>Select a genre</div>
 </div>
 
+<button class="hit transport" data-action="play"
+style="left:37.2%;top:39.4%;width:2.3%;height:2.3%;">▶</button>
+
+<button class="hit transport" data-action="pause"
+style="left:37.2%;top:42.2%;width:2.3%;height:2.3%;">❚❚</button>
+
+<button class="hit transport" data-action="stop"
+style="left:37.2%;top:45.0%;width:2.3%;height:2.3%;">■</button>
+
 <button class="hit genre" data-genre="Pop"
-style="left:42.3%;top:49.8%;width:5.7%;height:2.9%;"></button>
+style="left:42.3%;top:49.8%;width:5.7%;height:2.9%;">Pop</button>
 
 <button class="hit genre" data-genre="HipHop"
-style="left:52.8%;top:49.8%;width:5.7%;height:2.9%;"></button>
+style="left:52.8%;top:49.8%;width:5.7%;height:2.9%;">Hip&nbsp;Hop</button>
 
 <button class="hit genre" data-genre="Rock"
-style="left:42.2%;top:55.0%;width:5.7%;height:2.8%;"></button>
+style="left:42.2%;top:55.0%;width:5.7%;height:2.8%;">Rock</button>
 
 <button class="hit genre" data-genre="EDM"
-style="left:52.8%;top:55.0%;width:5.7%;height:2.8%;"></button>
+style="left:52.8%;top:55.0%;width:5.7%;height:2.8%;">EDM</button>
 
 <button class="hit genre" data-genre="RnB"
-style="left:42.3%;top:60.3%;width:5.7%;height:2.8%;"></button>
+style="left:42.3%;top:60.3%;width:5.7%;height:2.8%;">R&amp;B</button>
 
 <button class="hit genre" data-genre="Jazz"
-style="left:52.8%;top:60.3%;width:5.7%;height:2.8%;"></button>
+style="left:52.8%;top:60.3%;width:5.7%;height:2.8%;">Jazz</button>
 
 <button class="hit genre" data-genre="Disco"
-style="left:42.3%;top:65.6%;width:5.7%;height:2.8%;"></button>
+style="left:42.3%;top:65.6%;width:5.7%;height:2.8%;">Disco</button>
 
 <button class="hit genre" data-genre="Random"
-style="left:52.8%;top:65.6%;width:5.7%;height:2.8%;"></button>
+style="left:52.8%;top:65.6%;width:5.7%;height:2.8%;">Random</button>
 
 </div>
 </div>
 
 <div class="controls">
-<label>
-<input id="debugToggle" type="checkbox"/> Debug overlay
-</label>
 <div class="now" id="nowLine"><b>Now:</b> nothing playing</div>
 </div>
 
@@ -104,15 +148,10 @@ Jazz:[{title:"Jazz Track",src:"audio/jazz1.mp3"}],
 Disco:[{title:"Disco Track",src:"audio/disco1.mp3"}]
 };
 
-const wrap=document.getElementById("wrap");
 const topScreen=document.getElementById("topScreen");
 const midText=document.getElementById("midText");
 const nowLine=document.getElementById("nowLine");
 const player=document.getElementById("player");
-
-document.getElementById("debugToggle").addEventListener("change",e=>{
-wrap.classList.toggle("debug",e.target.checked);
-});
 
 function playTrack(track){
 player.src=track.src;
@@ -135,6 +174,23 @@ playTrack(track);
 
 document.querySelectorAll(".genre").forEach(btn=>{
 btn.addEventListener("click",()=>playGenre(btn.dataset.genre));
+});
+
+document.querySelectorAll(".transport").forEach(btn=>{
+btn.addEventListener("click",()=>{
+const action=btn.dataset.action;
+if(action==="play"){
+if(player.src) player.play();
+}else if(action==="pause"){
+player.pause();
+}else if(action==="stop"){
+player.pause();
+player.currentTime=0;
+topScreen.innerHTML=`<div><small>JUKEBOX</small>READY</div>`;
+midText.innerHTML=`<small>STATUS</small>Stopped`;
+nowLine.innerHTML=`<b>Now:</b> nothing playing`;
+}
+});
 });
 
 </script>
