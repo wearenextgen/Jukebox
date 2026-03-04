@@ -51,8 +51,12 @@ text-shadow:0 0 10px rgba(120,255,255,.35);color:rgba(200,255,255,.9);
 80%{color:#7dd3ff;}
 100%{color:#fdfcff;}
 }
+@keyframes sparkle{
+0%,100%{text-shadow:0 0 10px rgba(120,255,255,.35),0 0 0 rgba(255,255,255,0);}
+50%{text-shadow:0 0 10px rgba(120,255,255,.6),0 0 12px rgba(255,255,255,.9);}
+}
 .mid-anim{animation:midFloat 1.2s ease-in-out infinite, rainbowText 3s linear infinite;}
-.top-anim{animation:midFloat 1.2s ease-in-out infinite, rainbowText 3s linear infinite;}
+.top-anim{animation:midFloat 1.2s ease-in-out infinite, rainbowText 3s linear infinite, sparkle 1.4s ease-in-out infinite;}
 .hit{
 position:absolute;
 border:0;
@@ -76,12 +80,14 @@ box-shadow:0 0 8px rgba(255,255,255,.35);
 backdrop-filter:blur(3px);
 }
 .small-label{font-size:clamp(6px,0.9vw,8px);}
+.tiny-label{font-size:clamp(5px,0.75vw,7px);}
 .transport{
-border-radius:50%;
-font-size:10px;
-background:rgba(255,255,255,.18);
-border:1px solid rgba(255,255,255,.4);
-box-shadow:0 0 10px rgba(255,255,255,.4);
+background:none;
+border:none;
+box-shadow:none;
+border-radius:0;
+font-size:12px;
+animation:rainbowText 3s linear infinite;
 }
 .hidden{display:none;}
 .hit:active{transform:translateY(1px);}
@@ -110,15 +116,15 @@ style="left:40.0%;top:39.0%;width:20.8%;height:6.9%;">
 </div>
 
 <button class="hit transport" data-action="play"
-style="left:34.0%;top:41.8%;width:2.3%;height:2.3%;">▶</button>
+style="left:33.7%;top:41.8%;width:2.3%;height:2.3%;">▶</button>
 
 <button class="hit transport" data-action="pause"
-style="left:34.0%;top:41.8%;width:2.3%;height:2.3%;">❚❚</button>
+style="left:33.7%;top:41.8%;width:2.3%;height:2.3%;">❚❚</button>
 
 <button class="hit genre" data-genre="Pop"
 style="left:42.3%;top:49.8%;width:5.7%;height:2.9%;">Pop</button>
 
-<button class="hit genre small-label" data-genre="HipHop"
+<button class="hit genre tiny-label" data-genre="HipHop"
 style="left:52.8%;top:49.8%;width:5.7%;height:2.9%;">Hip&nbsp;Hop</button>
 
 <button class="hit genre" data-genre="Rock"
@@ -136,7 +142,7 @@ style="left:52.8%;top:60.3%;width:5.7%;height:2.8%;">Jazz</button>
 <button class="hit genre small-label" data-genre="Disco"
 style="left:42.3%;top:65.6%;width:5.7%;height:2.8%;">Disco</button>
 
-<button class="hit genre small-label" data-genre="Random"
+<button class="hit genre tiny-label" data-genre="Random"
 style="left:52.8%;top:65.6%;width:5.7%;height:2.8%;">Random</button>
 
 </div>
