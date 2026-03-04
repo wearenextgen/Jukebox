@@ -11,7 +11,12 @@
 :root{--img-w:1570;--img-h:2048;}
 body{
 margin:0;
-background:#111;
+background:#05010a;
+background-image:
+radial-gradient(circle at 20% 0%, #4b2cff 0, transparent 55%),
+radial-gradient(circle at 80% 100%, #ff2fd1 0, transparent 55%),
+radial-gradient(circle at -10% 60%, #14f1ff 0, transparent 55%);
+background-attachment:fixed;
 font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
 color:#fff;
 display:flex;
@@ -20,6 +25,8 @@ align-items:center;
 justify-content:center;
 padding:24px;
 box-sizing:border-box;
+position:relative;
+overflow:hidden;
 }
 .stage{width:min(520px,95vw);}
 .jukebox-wrap{
@@ -57,6 +64,37 @@ text-shadow:0 0 10px rgba(120,255,255,.35);color:rgba(200,255,255,.9);
 }
 .mid-anim{animation:midFloat 1.2s ease-in-out infinite, rainbowText 3s linear infinite;}
 .top-anim{animation:midFloat 1.2s ease-in-out infinite, rainbowText 3s linear infinite, sparkle 1.4s ease-in-out infinite;}
+.screensaver-shape{
+position:fixed;
+width:min(140px,32vw);
+aspect-ratio:4/3;
+background:
+repeating-linear-gradient(90deg,rgba(255,255,255,.09) 0 2px,transparent 2px 4px),
+linear-gradient(135deg,#7cffd9,#ffea7a,#ff7ad9);
+opacity:.35;
+mix-blend-mode:screen;
+image-rendering:pixelated;
+filter:drop-shadow(0 0 14px rgba(255,255,255,.8));
+pointer-events:none;
+z-index:-1;
+border-radius:14px;
+}
+.screensaver-1{animation:dvdBounce1 19s linear infinite alternate;}
+.screensaver-2{animation:dvdBounce2 23s linear infinite alternate-reverse;}
+@keyframes dvdBounce1{
+0%{transform:translate3d(-5vw,-5vh,0);}
+25%{transform:translate3d(65vw,5vh,0);}
+50%{transform:translate3d(40vw,65vh,0);}
+75%{transform:translate3d(5vw,70vh,0);}
+100%{transform:translate3d(70vw,30vh,0);}
+}
+@keyframes dvdBounce2{
+0%{transform:translate3d(70vw,-10vh,0) scale(.8);}
+25%{transform:translate3d(10vw,10vh,0) scale(1);}
+50%{transform:translate3d(5vw,65vh,0) scale(.9);}
+75%{transform:translate3d(60vw,70vh,0) scale(1.05);}
+100%{transform:translate3d(75vw,35vh,0) scale(.9);}
+}
 .hit{
 position:absolute;
 border:0;
@@ -98,6 +136,9 @@ animation:rainbowText 3s linear infinite;
 </head>
 
 <body>
+
+<div class="screensaver-shape screensaver-1"></div>
+<div class="screensaver-shape screensaver-2"></div>
 
 <div class="stage">
 
