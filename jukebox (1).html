@@ -38,12 +38,21 @@ text-shadow:0 0 10px rgba(120,255,255,.35);color:rgba(200,255,255,.9);
 .screen small{display:block;opacity:.9;font-weight:600;}
 .topText{font-size:clamp(10px,2vw,18px);line-height:1.1;}
 .midText{font-size:clamp(9px,1.7vw,15px);line-height:1.15;}
-.mid-anim{animation:midFloat 1.2s ease-in-out infinite;}
 @keyframes midFloat{
 0%{transform:translateY(0);}
 50%{transform:translateY(-2px);}
 100%{transform:translateY(0);}
 }
+@keyframes rainbowText{
+0%{color:#fdfcff;}
+20%{color:#ff8ad4;}
+40%{color:#ffe66b;}
+60%{color:#7dffb8;}
+80%{color:#7dd3ff;}
+100%{color:#fdfcff;}
+}
+.mid-anim{animation:midFloat 1.2s ease-in-out infinite, rainbowText 3s linear infinite;}
+.top-anim{animation:midFloat 1.2s ease-in-out infinite, rainbowText 3s linear infinite;}
 .hit{
 position:absolute;
 border:0;
@@ -66,6 +75,7 @@ border:1px solid rgba(255,255,255,.3);
 box-shadow:0 0 8px rgba(255,255,255,.35);
 backdrop-filter:blur(3px);
 }
+.small-label{font-size:clamp(6px,0.9vw,8px);}
 .transport{
 border-radius:50%;
 font-size:10px;
@@ -100,15 +110,15 @@ style="left:40.0%;top:39.0%;width:20.8%;height:6.9%;">
 </div>
 
 <button class="hit transport" data-action="play"
-style="left:33.0%;top:40.0%;width:2.3%;height:2.3%;">▶</button>
+style="left:34.0%;top:41.8%;width:2.3%;height:2.3%;">▶</button>
 
 <button class="hit transport" data-action="pause"
-style="left:33.0%;top:43.5%;width:2.3%;height:2.3%;">❚❚</button>
+style="left:34.0%;top:41.8%;width:2.3%;height:2.3%;">❚❚</button>
 
 <button class="hit genre" data-genre="Pop"
 style="left:42.3%;top:49.8%;width:5.7%;height:2.9%;">Pop</button>
 
-<button class="hit genre" data-genre="HipHop"
+<button class="hit genre small-label" data-genre="HipHop"
 style="left:52.8%;top:49.8%;width:5.7%;height:2.9%;">Hip&nbsp;Hop</button>
 
 <button class="hit genre" data-genre="Rock"
@@ -123,10 +133,10 @@ style="left:42.3%;top:60.3%;width:5.7%;height:2.8%;">R&amp;B</button>
 <button class="hit genre" data-genre="Jazz"
 style="left:52.8%;top:60.3%;width:5.7%;height:2.8%;">Jazz</button>
 
-<button class="hit genre" data-genre="Disco"
+<button class="hit genre small-label" data-genre="Disco"
 style="left:42.3%;top:65.6%;width:5.7%;height:2.8%;">Disco</button>
 
-<button class="hit genre" data-genre="Random"
+<button class="hit genre small-label" data-genre="Random"
 style="left:52.8%;top:65.6%;width:5.7%;height:2.8%;">Random</button>
 
 </div>
@@ -179,8 +189,9 @@ player.src=track.src;
 player.play();
 playState="playing";
 updateTransportUI();
-midText.innerHTML=`<small>STATUS</small>Enjoy the music ♪`;
+midText.innerHTML=`Enjoy the music ♪`;
 midText.classList.add("mid-anim");
+topScreen.classList.add("top-anim");
 topScreen.innerHTML=`<div><small>NOW PLAYING</small>${track.title}</div>`;
 nowLine.innerHTML=`<b>Now:</b> ${track.title}`;
 }
@@ -207,14 +218,16 @@ if(action==="play"){
 if(player.src){
 player.play();
 playState="playing";
-midText.innerHTML=`<small>STATUS</small>Enjoy the music ♪`;
+midText.innerHTML=`Enjoy the music ♪`;
 midText.classList.add("mid-anim");
+topScreen.classList.add("top-anim");
 }
 }else if(action==="pause"){
 player.pause();
 playState="paused";
 midText.innerHTML=`<small>STATUS</small>Paused`;
 midText.classList.remove("mid-anim");
+topScreen.classList.remove("top-anim");
 }
 updateTransportUI();
 });
@@ -226,6 +239,7 @@ updateTransportUI();
 topScreen.innerHTML=`<div><small>JUKEBOX</small>READY</div>`;
 midText.innerHTML=`<small>STATUS</small>Select a genre`;
 midText.classList.remove("mid-anim");
+topScreen.classList.remove("top-anim");
 nowLine.innerHTML=`<b>Now:</b> nothing playing`;
 });
 </script>
