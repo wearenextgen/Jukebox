@@ -51,8 +51,8 @@ align-items:center;
 justify-content:center;
 font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
 font-weight:600;
-font-size:clamp(8px,1.4vw,12px);
-letter-spacing:.05em;
+font-size:clamp(7px,1.1vw,10px);
+letter-spacing:.03em;
 text-transform:uppercase;
 color:rgba(255,255,255,.92);
 text-shadow:0 0 6px rgba(0,0,0,.75);
@@ -67,6 +67,7 @@ background:rgba(255,255,255,.18);
 border:1px solid rgba(255,255,255,.4);
 box-shadow:0 0 10px rgba(255,255,255,.4);
 }
+.hidden{display:none;}
 .hit:active{transform:translateY(1px);}
 .controls{margin-top:14px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
 .controls label{display:flex;align-items:center;gap:8px;opacity:.9;font-size:14px;}
@@ -93,13 +94,13 @@ style="left:40.0%;top:39.0%;width:20.8%;height:6.9%;">
 </div>
 
 <button class="hit transport" data-action="play"
-style="left:37.2%;top:39.4%;width:2.3%;height:2.3%;">▶</button>
+style="left:35.5%;top:39.4%;width:2.3%;height:2.3%;">▶</button>
 
 <button class="hit transport" data-action="pause"
-style="left:37.2%;top:42.2%;width:2.3%;height:2.3%;">❚❚</button>
+style="left:35.5%;top:42.4%;width:2.3%;height:2.3%;">❚❚</button>
 
 <button class="hit transport" data-action="stop"
-style="left:37.2%;top:45.0%;width:2.3%;height:2.3%;">■</button>
+style="left:35.5%;top:45.4%;width:2.3%;height:2.3%;">■</button>
 
 <button class="hit genre" data-genre="Pop"
 style="left:42.3%;top:49.8%;width:5.7%;height:2.9%;">Pop</button>
@@ -152,10 +153,33 @@ const topScreen=document.getElementById("topScreen");
 const midText=document.getElementById("midText");
 const nowLine=document.getElementById("nowLine");
 const player=document.getElementById("player");
+const playBtn=document.querySelector('.transport[data-action="play"]');
+const pauseBtn=document.querySelector('.transport[data-action="pause"]');
+const stopBtn=document.querySelector('.transport[data-action="stop"]');
+let playState="stopped";
+
+function updateTransportUI(){
+if(playState==="stopped"){
+playBtn.classList.remove("hidden");
+pauseBtn.classList.add("hidden");
+stopBtn.classList.add("hidden");
+}else if(playState==="playing"){
+playBtn.classList.add("hidden");
+pauseBtn.classList.remove("hidden");
+stopBtn.classList.remove("hidden");
+}else if(playState==="paused"){
+playBtn.classList.remove("hidden");
+pauseBtn.classList.add("hidden");
+stopBtn.classList.remove("hidden");
+}
+}
+updateTransportUI();
 
 function playTrack(track){
 player.src=track.src;
 player.play();
+playState="playing";
+updateTransportUI();
 topScreen.innerHTML=`<div><small>NOW PLAYING</small>${track.title}</div>`;
 midText.innerHTML=`<small>STATUS</small>PLAYING`;
 nowLine.innerHTML=`<b>Now:</b> ${track.title}`;
@@ -180,16 +204,22 @@ document.querySelectorAll(".transport").forEach(btn=>{
 btn.addEventListener("click",()=>{
 const action=btn.dataset.action;
 if(action==="play"){
-if(player.src) player.play();
+if(player.src){
+player.play();
+playState="playing";
+}
 }else if(action==="pause"){
 player.pause();
+playState="paused";
 }else if(action==="stop"){
 player.pause();
 player.currentTime=0;
+playState="stopped";
 topScreen.innerHTML=`<div><small>JUKEBOX</small>READY</div>`;
 midText.innerHTML=`<small>STATUS</small>Stopped`;
 nowLine.innerHTML=`<b>Now:</b> nothing playing`;
 }
+updateTransportUI();
 });
 });
 
