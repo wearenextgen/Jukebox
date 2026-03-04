@@ -38,6 +38,12 @@ text-shadow:0 0 10px rgba(120,255,255,.35);color:rgba(200,255,255,.9);
 .screen small{display:block;opacity:.9;font-weight:600;}
 .topText{font-size:clamp(10px,2vw,18px);line-height:1.1;}
 .midText{font-size:clamp(9px,1.7vw,15px);line-height:1.15;}
+.mid-anim{animation:midFloat 1.2s ease-in-out infinite;}
+@keyframes midFloat{
+0%{transform:translateY(0);}
+50%{transform:translateY(-2px);}
+100%{transform:translateY(0);}
+}
 .hit{
 position:absolute;
 border:0;
@@ -94,13 +100,10 @@ style="left:40.0%;top:39.0%;width:20.8%;height:6.9%;">
 </div>
 
 <button class="hit transport" data-action="play"
-style="left:35.5%;top:39.4%;width:2.3%;height:2.3%;">▶</button>
+style="left:33.0%;top:40.0%;width:2.3%;height:2.3%;">▶</button>
 
 <button class="hit transport" data-action="pause"
-style="left:35.5%;top:42.4%;width:2.3%;height:2.3%;">❚❚</button>
-
-<button class="hit transport" data-action="stop"
-style="left:35.5%;top:45.4%;width:2.3%;height:2.3%;">■</button>
+style="left:33.0%;top:43.5%;width:2.3%;height:2.3%;">❚❚</button>
 
 <button class="hit genre" data-genre="Pop"
 style="left:42.3%;top:49.8%;width:5.7%;height:2.9%;">Pop</button>
@@ -155,22 +158,18 @@ const nowLine=document.getElementById("nowLine");
 const player=document.getElementById("player");
 const playBtn=document.querySelector('.transport[data-action="play"]');
 const pauseBtn=document.querySelector('.transport[data-action="pause"]');
-const stopBtn=document.querySelector('.transport[data-action="stop"]');
 let playState="stopped";
 
 function updateTransportUI(){
 if(playState==="stopped"){
 playBtn.classList.remove("hidden");
 pauseBtn.classList.add("hidden");
-stopBtn.classList.add("hidden");
 }else if(playState==="playing"){
 playBtn.classList.add("hidden");
 pauseBtn.classList.remove("hidden");
-stopBtn.classList.remove("hidden");
 }else if(playState==="paused"){
 playBtn.classList.remove("hidden");
 pauseBtn.classList.add("hidden");
-stopBtn.classList.remove("hidden");
 }
 }
 updateTransportUI();
@@ -180,8 +179,9 @@ player.src=track.src;
 player.play();
 playState="playing";
 updateTransportUI();
+midText.innerHTML=`<small>STATUS</small>Enjoy the music ♪`;
+midText.classList.add("mid-anim");
 topScreen.innerHTML=`<div><small>NOW PLAYING</small>${track.title}</div>`;
-midText.innerHTML=`<small>STATUS</small>PLAYING`;
 nowLine.innerHTML=`<b>Now:</b> ${track.title}`;
 }
 
@@ -207,22 +207,27 @@ if(action==="play"){
 if(player.src){
 player.play();
 playState="playing";
+midText.innerHTML=`<small>STATUS</small>Enjoy the music ♪`;
+midText.classList.add("mid-anim");
 }
 }else if(action==="pause"){
 player.pause();
 playState="paused";
-}else if(action==="stop"){
-player.pause();
-player.currentTime=0;
-playState="stopped";
-topScreen.innerHTML=`<div><small>JUKEBOX</small>READY</div>`;
-midText.innerHTML=`<small>STATUS</small>Stopped`;
-nowLine.innerHTML=`<b>Now:</b> nothing playing`;
+midText.innerHTML=`<small>STATUS</small>Paused`;
+midText.classList.remove("mid-anim");
 }
 updateTransportUI();
 });
 });
 
+player.addEventListener("ended",()=>{
+playState="stopped";
+updateTransportUI();
+topScreen.innerHTML=`<div><small>JUKEBOX</small>READY</div>`;
+midText.innerHTML=`<small>STATUS</small>Select a genre`;
+midText.classList.remove("mid-anim");
+nowLine.innerHTML=`<b>Now:</b> nothing playing`;
+});
 </script>
 
 </body>
