@@ -24,29 +24,11 @@ box-sizing:border-box;
 .stage{
 width:min(520px,95vw);
 position:relative;
-padding:10px;
-border-radius:28px;
-background:
-repeating-linear-gradient(45deg,rgba(255,255,255,.16) 0 2px,transparent 2px 4px),
-linear-gradient(135deg,#7cffd9,#ffea7a,#ff7ad9,#7dd3ff);
-background-size:6px 6px,280% 280%;
-box-shadow:0 0 40px rgba(255,255,255,.18);
-overflow:hidden;
-image-rendering:pixelated;
-animation:pixelDrift 18s linear infinite alternate;
-}
-.stage::before{
-content:"";
-position:absolute;
-inset:-20px;
-background:
-radial-gradient(circle at 10% 20%,rgba(255,255,255,.45) 0,transparent 40%),
-radial-gradient(circle at 80% 80%,rgba(255,255,255,.3) 0,transparent 45%),
-radial-gradient(circle at 40% 10%,rgba(255,255,255,.35) 0,transparent 50%);
-mix-blend-mode:screen;
-pointer-events:none;
-opacity:.7;
-animation:sparkle 2.2s ease-in-out infinite alternate;
+padding:0;
+border-radius:0;
+background:transparent;
+box-shadow:none;
+overflow:visible;
 }
 .jukebox-wrap{
 position:relative;
@@ -77,13 +59,6 @@ text-shadow:0 0 10px rgba(120,255,255,.35);color:rgba(200,255,255,.9);
 80%{color:#7dd3ff;}
 100%{color:#fdfcff;}
 }
-@keyframes pixelDrift{
-0%{background-position:0 0,0 0;}
-25%{background-position:0 0,30% 40%;}
-50%{background-position:0 0,60% 10%;}
-75%{background-position:0 0,10% 70%;}
-100%{background-position:0 0,80% 30%;}
-}
 @keyframes sparkle{
 0%,100%{text-shadow:0 0 10px rgba(120,255,255,.35),0 0 0 rgba(255,255,255,0);}
 50%{text-shadow:0 0 10px rgba(120,255,255,.6),0 0 12px rgba(255,255,255,.9);}
@@ -101,6 +76,7 @@ border-radius:10%;
 display:flex;
 align-items:center;
 justify-content:center;
+white-space:nowrap;
 font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
 font-weight:600;
 font-size:clamp(7px,1.1vw,10px);
@@ -114,6 +90,7 @@ backdrop-filter:blur(3px);
 }
 .small-label{font-size:clamp(6px,0.9vw,8px);}
 .tiny-label{font-size:clamp(5px,0.75vw,7px);}
+.micro-label{font-size:clamp(4.5px,0.68vw,6px);}
 .transport{
 background:none;
 border:none;
@@ -157,7 +134,7 @@ style="left:33.7%;top:41.8%;width:2.3%;height:2.3%;">❚❚</button>
 <button class="hit genre" data-genre="Pop"
 style="left:42.3%;top:49.8%;width:5.7%;height:2.9%;">Pop</button>
 
-<button class="hit genre tiny-label" data-genre="Acoustic"
+<button class="hit genre micro-label" data-genre="Acoustic"
 style="left:52.8%;top:49.8%;width:5.7%;height:2.9%;">Acoustic</button>
 
 <button class="hit genre" data-genre="Trap"
@@ -193,7 +170,7 @@ style="left:52.8%;top:65.6%;width:5.7%;height:2.8%;">Random</button>
 
 const library={
 Pop:[{title:"Pop Track",src:"audio/pop1.mp3"}],
-Acoustic:[{title:"Acoustic Track",src:"audio/jazz1.mp3"}],
+Acoustic:[{title:"Acoustic",src:"audio/jazz1.mp3"}],
 Trap:[{title:"Trap Track",src:"audio/hiphop1.mp3"}],
 Drill:[{title:"Drill Track",src:"audio/edm1.mp3"}],
 Punk:[{title:"Punk Track",src:"audio/rock1.mp3"}],
