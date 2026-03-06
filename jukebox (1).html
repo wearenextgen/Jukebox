@@ -53,7 +53,7 @@ position:relative;
 width:100%;
 aspect-ratio:1570/2048;
 user-select:none;
-background:url("jukebox.png") center center/contain no-repeat;
+background:var(--jukebox-skin,url("jukebox.png")) center center/contain no-repeat;
 }
 .overlay{position:absolute;inset:0;}
 .screen{
@@ -157,17 +157,17 @@ style="left:33.7%;top:41.8%;width:2.3%;height:2.3%;">❚❚</button>
 <button class="hit genre" data-genre="Pop"
 style="left:42.3%;top:49.8%;width:5.7%;height:2.9%;">Pop</button>
 
-<button class="hit genre tiny-label" data-genre="HipHop"
-style="left:52.8%;top:49.8%;width:5.7%;height:2.9%;">Hip&nbsp;Hop</button>
+<button class="hit genre tiny-label" data-genre="Acoustic"
+style="left:52.8%;top:49.8%;width:5.7%;height:2.9%;">Acoustic</button>
 
-<button class="hit genre" data-genre="Rock"
-style="left:42.2%;top:55.0%;width:5.7%;height:2.8%;">Rock</button>
+<button class="hit genre" data-genre="Trap"
+style="left:42.2%;top:55.0%;width:5.7%;height:2.8%;">Trap</button>
 
-<button class="hit genre" data-genre="EDM"
-style="left:52.8%;top:55.0%;width:5.7%;height:2.8%;">EDM</button>
+<button class="hit genre" data-genre="Drill"
+style="left:52.8%;top:55.0%;width:5.7%;height:2.8%;">Drill</button>
 
-<button class="hit genre" data-genre="RnB"
-style="left:42.3%;top:60.3%;width:5.7%;height:2.8%;">R&amp;B</button>
+<button class="hit genre" data-genre="Punk"
+style="left:42.3%;top:60.3%;width:5.7%;height:2.8%;">Punk</button>
 
 <button class="hit genre" data-genre="Jazz"
 style="left:52.8%;top:60.3%;width:5.7%;height:2.8%;">Jazz</button>
@@ -193,14 +193,25 @@ style="left:52.8%;top:65.6%;width:5.7%;height:2.8%;">Random</button>
 
 const library={
 Pop:[{title:"Pop Track",src:"audio/pop1.mp3"}],
-HipHop:[{title:"HipHop Track",src:"audio/hiphop1.mp3"}],
-Rock:[{title:"Rock Track",src:"audio/rock1.mp3"}],
-EDM:[{title:"EDM Track",src:"audio/edm1.mp3"}],
-RnB:[{title:"R&B Track",src:"audio/rnb1.mp3"}],
+Acoustic:[{title:"Acoustic Track",src:"audio/jazz1.mp3"}],
+Trap:[{title:"Trap Track",src:"audio/hiphop1.mp3"}],
+Drill:[{title:"Drill Track",src:"audio/edm1.mp3"}],
+Punk:[{title:"Punk Track",src:"audio/rock1.mp3"}],
 Jazz:[{title:"Jazz Track",src:"audio/jazz1.mp3"}],
 Disco:[{title:"Disco Track",src:"audio/disco1.mp3"}]
 };
 
+const skinMap={
+Pop:"jukebox.png",
+Acoustic:"acoustic.png",
+Trap:"trap.png",
+Drill:"drill.png",
+Punk:"punk.png",
+Jazz:"acoustic.png",
+Disco:"punk.png"
+};
+
+const wrap=document.getElementById("wrap");
 const topScreen=document.getElementById("topScreen");
 const midText=document.getElementById("midText");
 const nowLine=document.getElementById("nowLine");
@@ -208,6 +219,12 @@ const player=document.getElementById("player");
 const playBtn=document.querySelector('.transport[data-action="play"]');
 const pauseBtn=document.querySelector('.transport[data-action="pause"]');
 let playState="stopped";
+
+function setSkin(genre){
+const skin=skinMap[genre] || skinMap.Pop;
+wrap.style.setProperty("--jukebox-skin",`url("${skin}")`);
+}
+setSkin("Pop");
 
 function updateTransportUI(){
 if(playState==="stopped"){
@@ -242,6 +259,7 @@ genre=keys[Math.floor(Math.random()*keys.length)];
 }
 const tracks=library[genre];
 if(!tracks)return;
+setSkin(genre);
 const track=tracks[Math.floor(Math.random()*tracks.length)];
 playTrack(track);
 }
