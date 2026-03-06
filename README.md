@@ -59,6 +59,27 @@ Then open:
    - **Branch:** `main` / `/ (root)`
 4. Save and wait for the Pages URL to appear.
 
+### Live Play Link
+
+Use this direct link to open and play the jukebox:
+
+- [https://wearenextgen.github.io/Jukebox/](https://wearenextgen.github.io/Jukebox/)
+
+### Embed Link (iframe)
+
+You can embed the jukebox on another page with:
+
+```html
+<iframe
+  src="https://wearenextgen.github.io/Jukebox/"
+  title="Jukebox"
+  width="420"
+  height="640"
+  style="border:0; border-radius:12px;"
+  loading="lazy"
+></iframe>
+```
+
 ## Notes
 
 - Skin files should be true PNGs with alpha if you want transparent outer areas.
