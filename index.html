@@ -195,11 +195,11 @@ style="left:52.8%;top:55.0%;width:5.7%;height:2.8%;">Drill</button>
 <button class="hit genre" data-genre="Punk"
 style="left:42.3%;top:60.3%;width:5.7%;height:2.8%;">Punk</button>
 
-<button class="hit genre" data-genre="Jazz"
-style="left:52.8%;top:60.3%;width:5.7%;height:2.8%;">Jazz</button>
+<button class="hit genre" data-genre="Afro"
+style="left:52.8%;top:60.3%;width:5.7%;height:2.8%;">Afro</button>
 
-<button class="hit genre small-label" data-genre="Disco"
-style="left:42.3%;top:65.6%;width:5.7%;height:2.8%;">Disco</button>
+<button class="hit genre small-label" data-genre="Latin"
+style="left:42.3%;top:65.6%;width:5.7%;height:2.8%;">Latin</button>
 
 <button class="hit genre tiny-label" data-genre="Random"
 style="left:52.8%;top:65.6%;width:5.7%;height:2.8%;">Random</button>
@@ -218,14 +218,35 @@ style="left:52.8%;top:65.6%;width:5.7%;height:2.8%;">Random</button>
 <script>
 
 const library={
-Pop:[{title:"Pop Track",src:"audio/pop1.mp3"}],
-Acoustic:[{title:"Acoustic",src:"audio/jazz1.mp3"}],
-Trap:[{title:"Trap Track",src:"audio/hiphop1.mp3"}],
-Drill:[{title:"Drill Track",src:"audio/edm1.mp3"}],
-Punk:[{title:"Punk Track",src:"audio/rock1.mp3"}],
-Jazz:[{title:"Jazz Track",src:"audio/jazz1.mp3"}],
-Disco:[{title:"Disco Track",src:"audio/disco1.mp3"}]
+Pop:[{title:"Pop 1",src:"music/pop1.wav"}],
+Acoustic:[{title:"Acoustic 1",src:"music/acoustic1.wav"}],
+Trap:[{title:"Trap 1",src:"music/Trap1.m4a"}],
+Drill:[
+{title:"Drill 1",src:"music/Drill1.m4a"},
+{title:"Drill 2",src:"music/Drill2.m4a"}
+],
+Punk:[
+{title:"Punk 1",src:"music/punk1.wav"},
+{title:"Punk 2",src:"music/punk2.wav"}
+],
+Afro:[
+{title:"Afro 1",src:"music/afro1.m4a"},
+{title:"Afro 2",src:"music/afro2.m4a"},
+{title:"Afro 3",src:"music/afro3.m4a"}
+],
+Latin:[{title:"Latin Mix",src:"music/random.wav"}]
 };
+const allTracks=Object.entries(library).flatMap(([genre,tracks])=>
+tracks.map(track=>({...track,genre}))
+);
+library.Random=[
+...allTracks,
+{title:"Random 1",src:"music/random.wav",genre:"Pop"},
+{title:"Random 2",src:"music/random2.m4a",genre:"Pop"},
+{title:"Random 3",src:"music/random3.m4a",genre:"Pop"},
+{title:"Random 4",src:"music/random4.m4a",genre:"Pop"}
+];
+const nextIndexByGenre=Object.fromEntries(Object.keys(library).map(k=>[k,0]));
 
 const skinMap={
 Pop:"jukebox.png?v=3",
@@ -233,8 +254,8 @@ Acoustic:"acoustic.png?v=3",
 Trap:"trap.png?v=3",
 Drill:"drill.png?v=3",
 Punk:"punk.png?v=3",
-Jazz:"acoustic.png?v=3",
-Disco:"punk.png?v=3"
+Afro:"afro.png?v=1",
+Latin:"latin.png?v=1"
 };
 
 const wrap=document.getElementById("wrap");
@@ -245,6 +266,7 @@ const player=document.getElementById("player");
 const playBtn=document.querySelector('.transport[data-action="play"]');
 const pauseBtn=document.querySelector('.transport[data-action="pause"]');
 let playState="stopped";
+let currentGenre="";
 
 function setSkin(genre){
 const skin=skinMap[genre] || skinMap.Pop;
@@ -266,6 +288,18 @@ pauseBtn.classList.add("hidden");
 }
 updateTransportUI();
 
+function getNextTrack(genre){
+const tracks=library[genre] || [];
+if(!tracks.length) return null;
+if(genre==="Random"){
+return tracks[Math.floor(Math.random()*tracks.length)];
+}
+const idx=nextIndexByGenre[genre] % tracks.length;
+const track=tracks[idx];
+nextIndexByGenre[genre]=(idx+1)%tracks.length;
+return track;
+}
+
 function playTrack(track){
 player.src=track.src;
 player.play();
@@ -279,14 +313,17 @@ nowLine.innerHTML=`<b>Now:</b> ${track.title}`;
 }
 
 function playGenre(genre){
-if(genre==="Random"){
-const keys=Object.keys(library);
-genre=keys[Math.floor(Math.random()*keys.length)];
+const track=getNextTrack(genre);
+if(!track){
+midText.innerHTML=`<small>STATUS</small>No songs found`;
+return;
 }
-const tracks=library[genre];
-if(!tracks)return;
+currentGenre=genre;
+if(genre==="Random"){
+setSkin(track.genre || "Pop");
+}else if(skinMap[genre]){
 setSkin(genre);
-const track=tracks[Math.floor(Math.random()*tracks.length)];
+}
 playTrack(track);
 }
 
@@ -317,6 +354,7 @@ updateTransportUI();
 });
 
 player.addEventListener("ended",()=>{
+if(!currentGenre){
 playState="stopped";
 updateTransportUI();
 topScreen.innerHTML=`<div><small>JUKEBOX</small>READY</div>`;
@@ -324,6 +362,25 @@ midText.innerHTML=`<small>STATUS</small>Select a genre`;
 midText.classList.remove("mid-anim");
 topScreen.classList.remove("top-anim");
 nowLine.innerHTML=`<b>Now:</b> nothing playing`;
+return;
+}
+const nextTrack=getNextTrack(currentGenre);
+if(!nextTrack){
+playState="stopped";
+updateTransportUI();
+topScreen.innerHTML=`<div><small>JUKEBOX</small>READY</div>`;
+midText.innerHTML=`<small>STATUS</small>Select a genre`;
+midText.classList.remove("mid-anim");
+topScreen.classList.remove("top-anim");
+nowLine.innerHTML=`<b>Now:</b> nothing playing`;
+return;
+}
+if(currentGenre==="Random"){
+setSkin(nextTrack.genre || "Pop");
+}else if(skinMap[currentGenre]){
+setSkin(currentGenre);
+}
+playTrack(nextTrack);
 });
 </script>
 
