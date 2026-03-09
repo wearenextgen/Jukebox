@@ -67,17 +67,18 @@ Use this direct link to open and play the jukebox:
 
 ### Embed Link (iframe)
 
-You can embed the jukebox on another page with:
+You can embed the jukebox on another page with a responsive wrapper:
 
 ```html
-<iframe
-  src="https://wearenextgen.github.io/Jukebox/"
-  title="Jukebox"
-  width="420"
-  height="640"
-  style="border:0; border-radius:12px;"
-  loading="lazy"
-></iframe>
+<div style="position:relative;width:100%;height:min(90vh,900px);">
+  <iframe
+    src="https://wearenextgen.github.io/Jukebox/?embed=1"
+    title="Jukebox"
+    style="position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;"
+    allow="autoplay"
+    loading="lazy"
+  ></iframe>
+</div>
 ```
 
 ## Notes

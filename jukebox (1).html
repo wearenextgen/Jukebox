@@ -31,7 +31,7 @@ display:flex;
 min-height:100vh;
 align-items:center;
 justify-content:center;
-padding:24px;
+padding:8px;
 box-sizing:border-box;
 position:relative;
 overflow:hidden;
@@ -65,8 +65,7 @@ background-position:0 0,40px 70px,100px 30px;
 animation:starTwinkle 4.6s ease-in-out infinite;
 }
 .stage{
-width:min(95vw,calc((100vh - 56px) * 0.76));
-max-width:700px;
+width:min(100vw,calc(100dvh * 0.76));
 position:relative;
 padding:0;
 border-radius:0;
@@ -170,6 +169,8 @@ background:transparent !important;
 html.embed-mode body{
 animation:none;
 overflow:visible;
+padding:0;
+min-height:100dvh;
 }
 html.embed-mode body::before,
 html.embed-mode body::after{
